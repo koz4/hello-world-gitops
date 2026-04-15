@@ -18,6 +18,9 @@ spec:
           image: nginxinc/nginx-unprivileged:latest
           ports:
             - containerPort: 8080
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
           resources:
             requests:
               cpu: 50m
@@ -25,3 +28,7 @@ spec:
             limits:
               cpu: 100m
               memory: 128Mi
+      volumes:
+        - name: html
+          configMap:
+            name: hello-world-html

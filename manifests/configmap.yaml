@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-world-html
+  namespace: hello-world
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="pl">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Hello World</title>
+      <style>
+        body {
+          font-family: system-ui, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          margin: 0;
+          background: #1a1a2e;
+          color: #eee;
+        }
+        .container {
+          text-align: center;
+          padding: 2rem;
+        }
+        h1 { font-size: 3rem; margin-bottom: 0.5rem; }
+        p { font-size: 1.2rem; color: #aaa; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>Hello World!</h1>
+        <p>Deployed via ArgoCD on OpenShift</p>
+      </div>
+    </body>
+    </html>
