@@ -6,7 +6,7 @@ metadata:
 spec:
   to:
     kind: Service
-    name: hello-world
+    name: hello-world-internal
   port:
     targetPort: 8080
   tls:
