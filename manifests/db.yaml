@@ -51,21 +51,21 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:15-alpine
+          image: centos/postgresql-12-centos7
           ports:
             - containerPort: 5432
           env:
-            - name: POSTGRES_USER
+            - name: POSTGRESQL_USER
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
                   key: DB_USER
-            - name: POSTGRES_PASSWORD
+            - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
                   key: DB_PASSWORD
-            - name: POSTGRES_DB
+            - name: POSTGRESQL_DATABASE
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
