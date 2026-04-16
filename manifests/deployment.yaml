@@ -5,6 +5,7 @@ metadata:
   namespace: hello-world
 spec:
   replicas: 2
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: hello-world

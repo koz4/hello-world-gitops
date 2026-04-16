@@ -3,28 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OpenShift CRUD App</title>
+    <title>Modern CRUD OpenShift</title>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; background: #f4f4f9; }
-        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #333; text-align: center; }
-        .input-group { display: flex; gap: 10px; margin-bottom: 1.5rem; }
-        input[type="text"] { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
-        button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; background: #0066cc; color: white; }
-        button:hover { background: #0052a3; }
-        ul { list-style: none; padding: 0; }
-        li { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee; gap: 10px; }
-        li:last-child { border-bottom: none; }
-        .todo-text { flex: 1; }
-        .completed { text-decoration: line-through; color: #888; }
-        .delete-btn { background: #cc0000; padding: 4px 8px; font-size: 0.8rem; }
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animowane tło */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
+            z-index: -1;
+            animation: pulseBg 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin: 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            gap: 12px;
+            transition: transform 0.2s;
+        }
+
+        li:hover {
+            transform: scale(1.01);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .todo-text {
+            flex: 1;
+            font-size: 1rem;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .delete-btn:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Lista zadań (CRUD)</h1>
+        <h1>CRUD App</h1>
         <div class="input-group">
-            <input type="text" id="todoInput" placeholder="Co jest do zrobienia?">
+            <input type="text" id="todoInput" placeholder="Co mamy dziś do zrobienia?">
             <button onclick="addTodo()">Dodaj</button>
         </div>
         <ul id="todoList"></ul>
@@ -32,19 +168,21 @@
 
     <script>
         async function fetchTodos() {
-            const res = await fetch('/api/todos');
-            const todos = await res.json();
-            const list = document.getElementById('todoList');
-            list.innerHTML = '';
-            todos.forEach(todo => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <input type="checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${todo.id}, this.checked)">
-                    <span class="todo-text ${todo.completed ? 'completed' : ''}">${todo.title}</span>
-                    <button class="delete-btn" onclick="deleteTodo(${todo.id})">Usuń</button>
-                `;
-                list.appendChild(li);
-            });
+            try {
+                const res = await fetch('/api/todos');
+                const todos = await res.json();
+                const list = document.getElementById('todoList');
+                list.innerHTML = '';
+                todos.forEach(todo => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <input type="checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${todo.id}, this.checked)">
+                        <span class="todo-text ${todo.completed ? 'completed' : ''}">${todo.title}</span>
+                        <button class="delete-btn" onclick="deleteTodo(${todo.id})">Usuń</button>
+                    `;
+                    list.appendChild(li);
+                });
+            } catch (e) { console.error("Błąd pobierania:", e); }
         }
 
         async function addTodo() {
